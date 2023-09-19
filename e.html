@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Live News Feed</h2>
+
+    <div id="rssOutput">Loading...</div>
+
+    <script>
+      // RSS feed URL
+      var url = "https://news.google.com/rss";
+
+      fetch(url)
+        .then((response) => response.text())
+        .then((str) => new window.DOMParser().parseFromString(str, "text/xml"))
+        .then((data) => {
+          var items = data.querySelectorAll("item");
+          var html = ``;
+          items.forEach((el) => {
+            html += `
+        <div>
+            <h3><a href="${el.querySelector("link").innerHTML}">${
+              el.querySelector("title").innerHTML
+            }</a></h3>
+            <p>${el.querySelector("description").innerHTML}</p>
+        </div>`;
+          });
+          document.querySelector("#rssOutput").innerHTML = html;
+        });
+    </script>
+  </body>
+</html>
